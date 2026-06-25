@@ -17,7 +17,7 @@ interface Props {
 const {
   source = 'website',
   heading = 'Request a Free Quote',
-  sub = 'Tell us where your tank is and what’s going on — we’ll call you back with a quote.',
+  sub = 'Tell us where your well is and what’s going on — we’ll call you back with a quote.',
 } = Astro.props;
 
 const subject = `New lead — ${SITE.company} (${source})`;
@@ -55,8 +55,8 @@ const subject = `New lead — ${SITE.company} (${source})`;
       <input id="lf-address" name="address" type="text" placeholder="e.g. Dripping Springs, or a street near Wimberley" />
     </div>
     <div class="field">
-      <label for="lf-message">What’s going on â new well, no water, low pressure, or a pump issue?</label>
-      <textarea id="lf-message" name="message" rows="4" placeholder="Routine pump, backup, soggy yard, alarm, or an inspection for a home sale… and when it was last pumped if you know."></textarea>
+      <label for="lf-message">What’s going on — new well, no water, low pressure, or a pump issue?</label>
+      <textarea id="lf-message" name="message" rows="4" placeholder="New build that needs a well, no water, low pressure, a pump that keeps cycling, dirty water, or an inspection for a home sale… and anything you know about the well’s depth or pump."></textarea>
     </div>
     <div class="field">
       <label for="lf-photo">Photo (optional)</label>

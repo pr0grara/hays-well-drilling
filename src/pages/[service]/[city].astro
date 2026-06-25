@@ -39,7 +39,7 @@ const combinedFaqs = [...city.faqs, ...service.faqs].filter(
 );
 
 const title = `${service.name} in ${where} | ${SITE.company}`;
-const description = `${service.short} in ${city.name}, ${city.state ?? 'NC'}. ${service.blurb} Local ${SITE.trade} — call ${SITE.phoneDisplay} for a fast quote.`;
+const description = `${service.short} in ${city.name}, ${city.state ?? 'TX'}. ${service.blurb} Local ${SITE.trade} — call ${SITE.phoneDisplay} for a fast quote.`;
 
 const jsonLd = [
   breadcrumb([
@@ -84,14 +84,14 @@ if (faqLd) jsonLd.push(faqLd);
 
         <Image
           src={photo}
-          alt={`${service.name} in ${city.name}, ${city.state ?? 'NC'}`}
+          alt={`${service.name} in ${city.name}, ${city.state ?? 'TX'}`}
           widths={[480, 760, 1000]}
           sizes="(max-width: 920px) 100vw, 640px"
           loading="lazy"
           style="border-radius:12px;margin:8px 0 20px;"
         />
 
-        <h3>Septic service in {city.name}</h3>
+        <h3>Well service in {city.name}</h3>
         <p>{city.intro}</p>
 
         <ul class="checklist">

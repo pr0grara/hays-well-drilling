@@ -26,8 +26,8 @@ const heroUrl = await getHeroUrl(city.heroImage);
 const where = city.state ? `${city.name}, ${city.state}` : city.name;
 const near = nearbyCities(city);
 
-const title = `Septic Service in ${where} | ${SITE.company}`;
-const description = `Septic tank pumping, cleaning, repairs, drain fields, and inspections in ${where}. Local ${SITE.trade} — we come to your property. Call ${SITE.phoneDisplay}.`;
+const title = `Well Drilling & Pump Service in ${where} | ${SITE.company}`;
+const description = `Water well drilling, pump installation and repair, pressure tanks, and inspections in ${where}. Local ${SITE.trade} — we come to your property. Call ${SITE.phoneDisplay}.`;
 
 const jsonLd = [
   breadcrumb([
@@ -46,10 +46,10 @@ if (faqLd) jsonLd.push(faqLd);
       <nav class="crumbs" aria-label="Breadcrumb">
         <a href="/">Home</a><span>/</span>Service Area<span>/</span>{city.name}
       </nav>
-      <h1>Septic Service in {where}</h1>
+      <h1>Well Drilling & Pump Service in {where}</h1>
       <p>
-        Septic tank pumping, cleaning, repairs, drain fields, and inspections for {city.name} — we
-        come to your property and do the work on-site. Straight quotes and priority on backups and
+        Water well drilling, pump installation and repair, pressure tanks, and inspections for {city.name} — we
+        come to your property and do the work on-site. Straight quotes and priority on no-water
         emergencies.
       </p>
       <div class="hero-actions">
@@ -63,7 +63,7 @@ if (faqLd) jsonLd.push(faqLd);
   <section class="section">
     <div class="container split">
       <div class="prose">
-        <h2>Your {city.name} Septic Crew</h2>
+        <h2>Your {city.name} Well Crew</h2>
         <p class="lead">{city.intro}</p>
 
         {
@@ -79,8 +79,8 @@ if (faqLd) jsonLd.push(faqLd);
       </div>
       <QuoteForm
         source={`city-${city.slug}`}
-        heading={`Septic Service in ${city.name}`}
-        sub={`Tell us where your tank is and what’s going on — we’ll call you back with a real answer.`}
+        heading={`Well Service in ${city.name}`}
+        sub={`Tell us where your well is and what’s going on — we’ll call you back with a real answer.`}
       />
     </div>
   </section>
@@ -95,8 +95,8 @@ if (faqLd) jsonLd.push(faqLd);
   <NearbyCities cities={near} cityName={city.name} />
 
   <div class="section-soft">
-    <FaqSection faqs={city.faqs} title={`Septic Service in ${city.name} — FAQs`} />
+    <FaqSection faqs={city.faqs} title={`Well Service in ${city.name} — FAQs`} />
   </div>
 
-  <FinalCta heading={`Septic Trouble in ${city.name}?`} />
+  <FinalCta heading={`Well Trouble in ${city.name}?`} />
 </BaseLayout>

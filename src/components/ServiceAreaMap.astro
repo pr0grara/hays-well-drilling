@@ -13,10 +13,10 @@ interface County {
   query: string;
 }
 
-// Western NC mountain coverage (Buncombe County + the surrounding mountain counties).
+// Hays County Hill Country coverage (Dripping Springs / Wimberley area + the surrounding Hill Country).
 const COUNTIES: County[] = [
-  { name: 'Asheville & Buncombe County', query: 'Asheville, North Carolina' },
-  { name: 'Hendersonville, Haywood & the Surrounding Mountains', query: 'Hendersonville, North Carolina' },
+  { name: 'Dripping Springs & Western Hays County', query: 'Dripping Springs, Texas' },
+  { name: 'Wimberley, San Marcos & the Surrounding Hill Country', query: 'Wimberley, Texas' },
 ];
 
 const embed = (q: string) =>
@@ -26,10 +26,10 @@ const embed = (q: string) =>
 <section class="section section-soft" id="service-area">
   <div class="container">
     <div class="section-head">
-      <h2>Septic Service Across {SITE.region}</h2>
+      <h2>Well Drilling & Pump Service Across {SITE.region}</h2>
       <p class="lead muted">
-        {SITE.company} covers {SITE.region} and the surrounding mountain counties — we come to your
-        property, in town or up a cove. Don’t see your area? Call us — we likely cover it.
+        {SITE.company} covers {SITE.region} and the surrounding Hill Country — we come to your
+        property, in town or out on rural acreage. Don’t see your area? Call us — we likely cover it.
       </p>
     </div>
 

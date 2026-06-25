@@ -18,7 +18,7 @@ interface Props {
 const { city, title, sub } = Astro.props;
 
 const list = city ? MATRIX_SERVICES : SERVICES;
-const headTitle = title ?? (city ? `Septic Services in ${city.name}` : 'What We Do');
+const headTitle = title ?? (city ? `Well Services in ${city.name}` : 'What We Do');
 ---
 
 <section class="section">
