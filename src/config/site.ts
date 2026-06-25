@@ -37,9 +37,9 @@ export const SITE: SiteConfig = {
   trade: 'water well drilling and pump service',
   phone: '+15125550133', // PLACEHOLDER — 512 = Dripping Springs/Wimberley/San Marcos
   phoneDisplay: '(512) 555-0133', // PLACEHOLDER — swap for the real number
-  email: 'office@hayswelldrilling.com', // PLACEHOLDER local-part — confirm the real inbox
+  email: 'office@drippingspringswelldrilling.com', // confirm the real inbox exists
   region: 'Hays County',
-  url: 'https://hayswelldrilling.com', // PLACEHOLDER domain — keep in sync with astro.config.mjs
+  url: 'https://drippingspringswelldrilling.com', // live domain — keep in sync with astro.config.mjs
   // Call-only for now: empty endpoint disables form submission and shows an on-page
   // "we'll call you back" acknowledgement without sending anything. Wire a backend later
   // (Web3Forms endpoint+key, Formspree endpoint, or a Worker URL) — see SPEC §8.
