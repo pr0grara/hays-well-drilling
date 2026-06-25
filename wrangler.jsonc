@@ -1,6 +1,6 @@
 {
   // Cloudflare static deploy (Workers Static Assets). No worker script — pure static.
-  "name": "wnc-septic",
+  "name": "hays-well-drilling",
   "compatibility_date": "2025-01-01",
   "assets": {
     "directory": "./dist"
