@@ -32,7 +32,7 @@ export interface SiteConfig {
 }
 
 export const SITE: SiteConfig = {
-  company: 'Hays County Well Drilling', // PLACEHOLDER company name — swap for the real business
+  company: 'Dripping Springs Well Drilling', // brand matches domain drippingspringswelldrilling.com
   tagline: 'Water Well Drilling & Pump Service',
   trade: 'water well drilling and pump service',
   phone: '+15125550133', // PLACEHOLDER — 512 = Dripping Springs/Wimberley/San Marcos
