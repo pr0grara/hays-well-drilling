@@ -1,0 +1,607 @@
+/* =========================================================================
+   global.css — single design system, inlined at build.
+   Plain, contractor-built well-drilling look: white page, dark text, deep
+   navy bands, and one strong service-green accent for every call/action, with
+   a simple banner image. No gradients, no heavy shadows, no animation — clean
+   and current, not a polished agency site. Light mode only.
+   ========================================================================= */
+
+:root {
+  --paper: #ffffff; /* page background — plain white */
+  --surface: #ffffff; /* cards / inputs — white with a gray border */
+  --ink: #1c2530; /* body text — near-black */
+  --ink-soft: #5a6573; /* muted gray */
+  --navy: #0f2c4d; /* header/footer bands + headings — deep navy */
+  --green: #2e7d32; /* primary action — the one strong accent (service green) */
+  --green-dark: #1b5e20; /* link color / hover */
+  --line: #d6dbe1; /* plain gray hairline borders */
+  --bg-soft: #f2f6f3; /* alt section background — light cool gray-green */
+  --radius: 6px;
+  --shadow: none;
+  --container: 1040px;
+}
+
+/* ---- reset ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  line-height: 1.55;
+  font-size: 16px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+a {
+  color: var(--green-dark);
+  text-decoration: underline;
+}
+a:hover {
+  color: #002b50;
+}
+
+/* ---- headings ---- */
+h1,
+h2,
+h3,
+h4 {
+  color: var(--navy);
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+  font-weight: bold;
+}
+h1 {
+  font-size: 28px;
+}
+h2 {
+  font-size: 22px;
+}
+h3 {
+  font-size: 18px;
+}
+p {
+  margin: 0 0 1rem;
+}
+ul {
+  margin: 0 0 1rem;
+  padding-left: 1.4rem;
+}
+
+/* ---- focus (a11y) ---- */
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 1px;
+}
+
+/* ---- layout ---- */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 18px;
+}
+.section {
+  padding: 40px 0;
+}
+.section-sm {
+  padding: 28px 0;
+}
+.section-soft {
+  background: var(--bg-soft);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.lead {
+  font-size: 17px;
+  color: var(--ink);
+}
+.muted {
+  color: var(--ink-soft);
+}
+.center {
+  text-align: center;
+}
+.section-head {
+  max-width: 760px;
+  margin: 0 0 24px;
+}
+.section-head.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- prose reading column ---- */
+.prose {
+  max-width: 720px;
+}
+.prose h2 {
+  margin-top: 1.4em;
+}
+.prose h3 {
+  margin-top: 1.2em;
+}
+
+/* ---- cards ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* ---- buttons ---- */
+.btn {
+  display: inline-block;
+  border: 1px solid var(--green-dark);
+  border-radius: var(--radius);
+  padding: 9px 18px;
+  font-weight: bold;
+  font-size: 15px;
+  font-family: inherit;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-lg {
+  padding: 12px 22px;
+  font-size: 17px;
+}
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+.btn-block {
+  width: 100%;
+}
+.btn-call,
+.btn-primary {
+  background: var(--green);
+  color: #fff;
+}
+.btn-call:hover,
+.btn-primary:hover {
+  background: var(--green-dark);
+  color: #fff;
+  text-decoration: none;
+}
+.btn-dark {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+.btn-dark:hover {
+  background: #0b3553;
+  color: #fff;
+  text-decoration: none;
+}
+.btn-outline {
+  background: #fff;
+  color: var(--green-dark);
+  border-color: #fff;
+}
+.btn-outline:hover {
+  background: #f1f1f1;
+  color: var(--green-dark);
+  text-decoration: none;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---- hero (a banner photo with a heading over it) ---- */
+.hero,
+.hero-single {
+  position: relative;
+  color: #ffffff;
+  background-color: var(--navy);
+  background-size: cover;
+  background-position: center;
+}
+.hero::before,
+.hero-single::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.hero > .container,
+.hero-single > .container {
+  position: relative;
+  z-index: 1;
+}
+.hero {
+  padding: 64px 0;
+}
+.hero-single {
+  padding: 44px 0;
+}
+.hero h1,
+.hero-single h1 {
+  color: #ffffff;
+  max-width: 22ch;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.hero p,
+.hero-single p {
+  color: #ffffff;
+  font-size: 17px;
+  max-width: 62ch;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+/* ---- simple landing headline (no background image — just big bold text) ---- */
+.lp-hero {
+  background: var(--paper);
+  padding: 54px 0 8px;
+}
+.lp-hero h1 {
+  font-size: clamp(2.1rem, 5.6vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  max-width: 20ch;
+  margin: 0;
+}
+.lp-photo img {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* ---- breadcrumbs ---- */
+.crumbs {
+  font-size: 13px;
+  color: #eeeeee;
+  margin-bottom: 12px;
+}
+.crumbs a {
+  color: #ffffff;
+}
+.crumbs span {
+  margin: 0 6px;
+}
+
+/* ---- chips (neighborhoods) ---- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.chips li {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 5px 12px;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+/* ---- checklist (points) ---- */
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.checklist li {
+  position: relative;
+  padding-left: 22px;
+}
+.checklist li::before {
+  content: '\2713'; /* plain check mark */
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--green);
+  font-weight: bold;
+}
+
+/* ---- trust row ---- */
+.trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  align-items: center;
+  margin-top: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.trust-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.trust-row .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* ---- service grid ---- */
+.svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.svc-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+.svc-card .svc-img {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  object-fit: cover;
+  border-bottom: 1px solid var(--line);
+}
+.svc-card .svc-body {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.svc-card h3 {
+  margin-bottom: 6px;
+}
+.svc-card .badge {
+  display: inline-block;
+  align-self: flex-start;
+  background: #b42318;
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+}
+.svc-card .svc-link {
+  margin-top: auto;
+  font-weight: bold;
+  padding-top: 10px;
+}
+
+/* ---- issue grid ---- */
+.issue-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* ---- city links grid ---- */
+.cities {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.cities a {
+  display: block;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font-weight: bold;
+  color: var(--green-dark);
+}
+.cities a:hover {
+  background: #f1f1f1;
+}
+.cities a small {
+  display: block;
+  font-weight: normal;
+  color: var(--ink-soft);
+}
+
+/* ---- testimonials ---- */
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.testimonial .stars {
+  color: #e3a008;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.testimonial .who {
+  margin-top: 10px;
+  font-weight: bold;
+  color: var(--navy);
+}
+.testimonial .who small {
+  display: block;
+  font-weight: normal;
+  color: var(--ink-soft);
+}
+
+/* ---- service rows (alternating) ---- */
+.srow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+.srow + .srow {
+  margin-top: 40px;
+}
+.srow img {
+  border: 1px solid var(--line);
+}
+.srow.reverse .srow-media {
+  order: 2;
+}
+
+/* ---- FAQ (details) ---- */
+.faq {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.faq + .faq {
+  margin-top: 8px;
+}
+.faq summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 16px;
+  font-weight: bold;
+  color: var(--navy);
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary::after {
+  content: '+';
+  font-size: 20px;
+  color: var(--green);
+  line-height: 1;
+  flex: none;
+}
+.faq[open] summary::after {
+  content: '\2013';
+}
+.faq .faq-body {
+  padding: 0 16px 16px;
+  color: var(--ink);
+}
+
+/* ---- forms ---- */
+.field {
+  margin-bottom: 14px;
+}
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--ink);
+}
+.field input,
+.field textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 9px 10px;
+  border: 1px solid #999;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+}
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--green);
+  outline: none;
+}
+.field .req {
+  color: #b42318;
+}
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.form-status {
+  margin-top: 10px;
+  font-weight: bold;
+}
+.form-status.ok {
+  color: var(--green-dark);
+}
+.form-status.err {
+  color: #b42318;
+}
+
+/* ---- generic 2-col split ---- */
+.split {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 36px;
+  align-items: start;
+}
+
+/* =========================================================================
+   Breakpoints
+   ========================================================================= */
+@media (max-width: 920px) {
+  .svc-grid,
+  .issue-grid,
+  .testimonials {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cities {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .srow,
+  .split {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .srow.reverse .srow-media {
+    order: 0;
+  }
+  .section {
+    padding: 32px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 44px 0;
+  }
+  .hero-single {
+    padding: 32px 0;
+  }
+  .svc-grid,
+  .issue-grid,
+  .testimonials,
+  .cities {
+    grid-template-columns: 1fr;
+  }
+  .section {
+    padding: 28px 0;
+  }
+  .btn-block-mobile {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 14px;
+  }
+  h1 {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,260 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ServiceAreaMap from '@components/ServiceAreaMap.astro';
+import FaqSection from '@components/FaqSection.astro';
+import FinalCta from '@components/FinalCta.astro';
+import QuoteForm from '@components/QuoteForm.astro';
+import CityLinks from '@components/CityLinks.astro';
+import { SITE, tel } from '@config/site';
+import { SERVICES, type Faq } from '@config/services';
+import { serviceUrl } from '../lib/urls';
+import { defaultHero } from '../lib/images';
+import { faqPage } from '../lib/schema';
+
+const title = `${SITE.region} Water Well Drilling & Pump Service`;
+const description = `Water well service across ${SITE.region}: well drilling, pump installation and repair, pressure tanks, inspections, and emergency no-water calls. Honest, local crew that knows Hill Country wells. Call ${SITE.phoneDisplay} for a fast quote.`;
+
+// Homepage FAQs (rendered + FAQ schema via FaqSection / faqPage).
+const homeFaqs: Faq[] = [
+  {
+    q: 'How much does it cost to drill a well in Hays County?',
+    a: 'Cost depends mostly on depth, which varies a lot across the county, plus casing and the pump and tank you install afterward. Because Hill Country wells can range from a few hundred feet to over 600, we evaluate your location and nearby well records before quoting so you get a realistic number rather than a lowball that grows.',
+  },
+  {
+    q: 'What well work do you do?',
+    a: 'New water well drilling, submersible pump installation and repair, pressure tank installation and service, well inspections for home sales, and routine maintenance. We also answer emergency no-water calls. One local crew covers the whole well system across Hays County.',
+  },
+  {
+    q: 'I suddenly have no water — what should I check first?',
+    a: 'Check the breaker or fuse for the well pump first — a tripped breaker is one of the most common, easy-to-fix causes. If it keeps tripping, do not keep resetting it; that points to an electrical or pump fault. If the breaker is fine and you still have no water, the pump, switch, or tank likely needs a look — call us.',
+  },
+  {
+    q: 'How do I get a quote?',
+    a: 'Call us with what is going on — a new build that needs a well, no water, low pressure, a pump that keeps cycling, dirty water, or an inspection for a home sale. That is usually enough for a straight answer over the phone. You can also send details through the quote form.',
+  },
+  {
+    q: 'Can you come the same day?',
+    a: 'Same-day service is often possible, especially for urgent no-water and total-pressure-loss calls — on a private well there is no backup supply. Ask when you call and we will give you a real time, not a runaround.',
+  },
+  {
+    q: 'What areas do you cover?',
+    a: 'Dripping Springs, Wimberley, San Marcos, Buda, Kyle, Driftwood, Woodcreek, Mountain City, Niederwald, Uhland, Hays, Manchaca, and the surrounding Hill Country communities. If you are not sure we reach you, call and ask — we likely do.',
+  },
+];
+
+const jsonLd = faqPage(homeFaqs) ?? [];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <!-- 1. Simple bold headline — no background image, no subtext -->
+  <section class="lp-hero">
+    <div class="container">
+      <h1>Water Well Drilling & Pump Service in {SITE.region}</h1>
+    </div>
+  </section>
+
+  <!-- 2. Photo + quote form -->
+  <section class="section-sm">
+    <div class="container split">
+      <div class="lp-photo">
+        <Image
+          src={defaultHero}
+          alt={`Water well drilling and pump service in ${SITE.region}`}
+          widths={[480, 760, 1000]}
+          sizes="(max-width: 920px) 100vw, 560px"
+          fetchpriority="high"
+          loading="eager"
+        />
+      </div>
+      <QuoteForm source="home-hero" />
+    </div>
+  </section>
+
+  <!-- 3. Intro / About -->
+  <section class="section section-soft" id="about">
+    <div class="container prose">
+      <h2>Your Local Well Crew — Drilling, Pumps &amp; Pressure Tanks.</h2>
+      <p>
+        We’re a full-service water well company serving {SITE.region} and the surrounding Hill
+        Country. A new well for a rural build, a pump that quit and left you with no water, low or
+        fluctuating pressure, a pressure tank that won’t stop cycling, or an inspection before you
+        buy or sell — we handle the whole well system, and we come to your property to do it.
+      </p>
+      <p>
+        Out here most homes run on a private well into the Trinity or Edwards aquifer, not city
+        water, and Hill Country wells have their own challenges: deep limestone, depths that change
+        from ridge to ridge, steep caliche drives, and droughts that drop the water table. Tell us
+        where your well is and what it’s doing, and we’ll give you a straight answer, a real price,
+        and a crew that knows the aquifers under your land.
+      </p>
+      <ul class="checklist">
+        <li>New water well drilling &amp; replacement wells</li>
+        <li>Submersible pump installation &amp; repair</li>
+        <li>Pressure tank installation &amp; service</li>
+        <li>Well inspections &amp; water testing for buyers &amp; sellers</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. What We Do — a section per service (alternating rows) -->
+  <section class="section section-soft" id="services">
+    <div class="container">
+      <div class="section-head">
+        <h2>What We Do</h2>
+        <p class="lead muted">
+          From drilling a new well to getting your water back on, here’s what we handle for
+          {SITE.region} homeowners.
+        </p>
+      </div>
+
+      {SERVICES.map((s, i) => (
+        <div class:list={['srow', { reverse: i % 2 === 1 }]}>
+          <div class="srow-media">
+            <a href={serviceUrl(s)}>
+              <Image
+                src={s.image}
+                alt={s.imageAlt}
+                widths={[480, 720, 960]}
+                sizes="(max-width: 920px) 100vw, 500px"
+                loading="lazy"
+                style="border-radius:var(--radius);width:100%;"
+              />
+            </a>
+          </div>
+          <div class="srow-body">
+            {s.emergency && <span class="badge">Emergency</span>}
+            <h3><a href={serviceUrl(s)}>{s.name}</a></h3>
+            <p>{s.description}</p>
+            <p class="srow-actions">
+              <a class="btn btn-primary" href={serviceUrl(s)}>More on {s.short} →</a>
+              <a class="btn btn-call" href={tel()}>Call {SITE.phoneDisplay}</a>
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 4. Service Across Hays County (maps + coverage) -->
+  <ServiceAreaMap />
+
+  <!-- 5. No water or low pressure? — urgency -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>No Water or Low Pressure? Don’t Wait.</h2>
+        <p class="lead muted">
+          On a private well there’s no utility to call — when the system quits, the house quits with
+          it. A few signs mean you should stop and call today.
+        </p>
+      </div>
+      <div class="issue-grid">
+        <div class="card">
+          <h3>No water means call now</h3>
+          <p class="muted">
+            Turn on a faucet and get nothing? On a well that’s an emergency — no drinking, cooking,
+            or bathing until it’s fixed. We come out, find why the system stopped — breaker, switch,
+            tank, or pump — and get your water flowing again fast.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Sputtering air or dirty water is a warning</h3>
+          <p class="muted">
+            Air spitting at the faucets can mean a dropping water level or a leak in the drop pipe;
+            sudden dirty or sandy water can mean a failing well or pump. Both need a look before they
+            turn into no water at all.
+          </p>
+        </div>
+        <div class="card">
+          <h3>A breaker that keeps tripping can’t be ignored</h3>
+          <p class="muted">
+            If the well-pump breaker trips the moment you reset it, stop — that points to a wiring or
+            pump fault, and forcing it can cause damage. Leave it off and call. The same goes for a
+            pump that short-cycles or runs nonstop.
+          </p>
+        </div>
+      </div>
+      <p style="text-align:center;margin-top:24px;">
+        <a class="btn btn-call btn-lg" href={tel()}>Call {SITE.phoneDisplay}</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. How It Works -->
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head">
+        <h2>How It Works</h2>
+        <p class="lead muted">Three steps, no runaround.</p>
+      </div>
+      <div class="issue-grid">
+        <div class="card">
+          <h3>1. Call or request a quote</h3>
+          <p class="muted">
+            Call {SITE.phoneDisplay} or send the quote form. Tell us where the property is and what’s
+            going on and we’ll give you a straight price and a real time.
+          </p>
+        </div>
+        <div class="card">
+          <h3>2. Tell us about your well</h3>
+          <p class="muted">
+            Let us know roughly where the well is, what you know about its depth or pump, and the
+            symptom — a new build, no water, low pressure, a cycling pump, or an inspection. That’s
+            usually enough for an honest quote.
+          </p>
+        </div>
+        <div class="card">
+          <h3>3. We come to your property</h3>
+          <p class="muted">
+            We diagnose or drill on-site, do the work — many jobs in one visit — and show you what we
+            find before recommending anything. No upsells, no surprises.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Service area list -->
+  <CityLinks
+    title={`Service Area — Across ${SITE.region} & the Hill Country`}
+    sub="Well drilling, pump service, and inspections for every community we cover."
+  />
+
+  <!-- 8. FAQ -->
+  <FaqSection faqs={homeFaqs} title="Questions We Hear a Lot" />
+
+  <!-- Final CTA -->
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .srow-body .badge {
+    display: inline-block;
+    background: #b42318;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+  }
+  .srow-body h3 {
+    font-size: 1.35rem;
+    margin-bottom: 8px;
+  }
+  .srow-body h3 a {
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .srow-body h3 a:hover {
+    color: var(--green-dark);
+  }
+  .srow-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+</style>

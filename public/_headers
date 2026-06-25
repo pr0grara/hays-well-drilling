@@ -1,0 +1,4 @@
+# Cloudflare cache rules
+# Content-hashed Astro assets (incl. optimized .webp) — cache hard for a year.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

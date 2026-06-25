@@ -1,0 +1,335 @@
+---
+/**
+ * Header.astro — two-row header cloned from the reference layout:
+ *   • top strip: company name (text, no logo) on the left, a large phone on the right
+ *   • nav band: Home · Services ▾ · About · Service Area ▾ · Contact (dropdowns
+ *     consolidate the long service/city lists so the bar stays simple)
+ * Dropdowns open on hover (desktop) and on tap/click (handled in the script).
+ */
+import { SITE, tel } from '@config/site';
+import { SERVICES } from '@config/services';
+import { CITIES } from '@config/cities';
+import { serviceUrl, cityUrl } from '../lib/urls';
+---
+
+<header class="site-header">
+  <!-- Top strip: brand text + big phone -->
+  <div class="container topbar">
+    <a href="/" class="brand" aria-label={`${SITE.company} home`}>
+      <strong>{SITE.company}c</strong>
+      <small>{SITE.tagline}</small>
+    </a>
+    <a class="topbar-phone" href={tel()}>
+      <span class="tp-label">Call now — we come to you</span>
+      <span class="tp-number">{SITE.phoneDisplay}</span>
+    </a>
+  </div>
+
+  <!-- Nav band with dropdowns -->
+  <nav class="navbar" aria-label="Primary">
+    <div class="container navbar-inner">
+      <button class="burger" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+        <em>Menu</em>
+      </button>
+
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="/">Home</a></li>
+
+        <li class="has-dropdown">
+          <button type="button" class="dd-toggle" aria-haspopup="true" aria-expanded="false">
+            Services <span class="caret" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown">
+            {SERVICES.map((s) => (
+              <li><a href={serviceUrl(s)}>{s.short}</a></li>
+            ))}
+          </ul>
+        </li>
+
+        <li><a href="/#about">About</a></li>
+
+        <li class="has-dropdown">
+          <button type="button" class="dd-toggle" aria-haspopup="true" aria-expanded="false">
+            Service Area <span class="caret" aria-hidden="true">▾</span>
+          </button>
+          <ul class="dropdown">
+            {CITIES.map((c) => (
+              <li><a href={cityUrl(c)}>{c.name}{c.state ? `, ${c.state}` : ''}</a></li>
+            ))}
+          </ul>
+        </li>
+
+        <li><a href="/#quote">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    background: var(--paper);
+    border-bottom: 3px solid var(--green);
+  }
+
+  /* ---- top strip ---- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 24px;
+  }
+  .brand {
+    text-decoration: none;
+    color: var(--navy);
+    line-height: 1.15;
+  }
+  .brand strong {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .brand small {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+  }
+  .topbar-phone {
+    text-decoration: none;
+    text-align: right;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .tp-label {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tp-number {
+    display: block;
+    color: var(--green);
+    font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+    font-weight: 800;
+    margin-top: 2px;
+  }
+  .topbar-phone:hover .tp-number {
+    color: var(--green-dark);
+  }
+
+  /* ---- nav band ---- */
+  .navbar {
+    background: var(--navy);
+  }
+  .navbar-inner {
+    display: flex;
+    align-items: stretch;
+  }
+  .nav-menu {
+    display: flex;
+    align-items: stretch;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+  .nav-menu > li {
+    position: relative;
+    display: flex;
+  }
+  .nav-menu a,
+  .dd-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 14px 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .nav-menu > li > a:hover,
+  .dd-toggle:hover,
+  .has-dropdown:hover .dd-toggle,
+  .has-dropdown.open .dd-toggle {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+  }
+  .caret {
+    font-size: 0.75rem;
+  }
+
+  /* ---- dropdowns ---- */
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 230px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--green);
+    box-shadow: 0 12px 28px -10px rgba(15, 44, 77, 0.35);
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+    z-index: 50;
+  }
+  .has-dropdown:hover .dropdown,
+  .has-dropdown:focus-within .dropdown,
+  .has-dropdown.open .dropdown {
+    display: block;
+  }
+  .dropdown li {
+    display: block;
+  }
+  .dropdown a {
+    display: block;
+    color: var(--navy);
+    padding: 9px 18px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .dropdown a:hover {
+    background: var(--bg-soft);
+    color: var(--green-dark);
+  }
+
+  /* ---- burger ---- */
+  .burger {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 14px 18px;
+    color: #ffffff;
+    font-weight: 700;
+  }
+  .burger span {
+    width: 22px;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 2px;
+  }
+  .burger span + span {
+    margin-top: -3px;
+  }
+  .burger em {
+    font-style: normal;
+    margin-left: 4px;
+  }
+
+  @media (max-width: 920px) {
+    .topbar {
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .brand,
+    .topbar-phone {
+      text-align: center;
+    }
+    .burger {
+      display: inline-flex;
+    }
+    .navbar-inner {
+      flex-direction: column;
+    }
+    .nav-menu {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      background: var(--navy);
+      padding-bottom: 8px;
+    }
+    .nav-menu.open {
+      display: flex;
+    }
+    .nav-menu > li {
+      flex-direction: column;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .nav-menu a,
+    .dd-toggle {
+      width: 100%;
+      justify-content: space-between;
+      padding: 13px 22px;
+    }
+    .dropdown {
+      position: static;
+      display: none;
+      box-shadow: none;
+      border: none;
+      border-top: none;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0;
+    }
+    /* On mobile, only show a dropdown when explicitly opened (no hover). */
+    .has-dropdown:hover .dropdown,
+    .has-dropdown:focus-within .dropdown {
+      display: none;
+    }
+    .has-dropdown.open .dropdown {
+      display: block;
+    }
+    .dropdown a {
+      color: #eef3f8;
+      padding-left: 38px;
+    }
+    .dropdown a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+  }
+</style>
+
+<script>
+  const burger = document.getElementById('nav-toggle');
+  const menu = document.getElementById('nav-menu');
+  burger?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  const toggles = document.querySelectorAll<HTMLButtonElement>('.dd-toggle');
+  toggles.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const li = btn.parentElement;
+      if (!li) return;
+      const isOpen = li.classList.contains('open');
+      // close any other open dropdowns
+      document.querySelectorAll('.has-dropdown.open').forEach((el) => {
+        if (el !== li) {
+          el.classList.remove('open');
+          el.querySelector('.dd-toggle')?.setAttribute('aria-expanded', 'false');
+        }
+      });
+      li.classList.toggle('open', !isOpen);
+      btn.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+    });
+  });
+
+  // Close dropdowns when clicking outside the nav.
+  document.addEventListener('click', (e) => {
+    const target = e.target as Node;
+    if (!(target instanceof Element) || !target.closest('.has-dropdown')) {
+      document.querySelectorAll('.has-dropdown.open').forEach((el) => {
+        el.classList.remove('open');
+        el.querySelector('.dd-toggle')?.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+</script>
