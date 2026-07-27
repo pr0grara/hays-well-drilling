@@ -43,8 +43,8 @@ export const SITE: SiteConfig = {
   // Call-only for now: empty endpoint disables form submission and shows an on-page
   // "we'll call you back" acknowledgement without sending anything. Wire a backend later
   // (Web3Forms endpoint+key, Formspree endpoint, or a Worker URL) — see SPEC §8.
-  formEndpoint: '',
-  formAccessKey: '',
+  formEndpoint: 'https://api.web3forms.com/submit',
+  formAccessKey: 'e3cc242b-9bf1-4322-af8a-6f64a8e780ac',
   mapEmbedSrc: '',
   priceRange: '$$',
   // No reviews wired up yet. Leave blank until real, verifiable reviews exist.
