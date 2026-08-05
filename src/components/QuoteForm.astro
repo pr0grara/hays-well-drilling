@@ -112,12 +112,11 @@ const TURNSTILE_SITEKEY = '0x4AAAAAAEGqFLtcdWMkDQAB';
     btn.disabled = true;
     btn.textContent = 'Submitting…';
     try {
-      const payload: Record<string, string> = {};
-      for (const [k, v] of fd.entries()) { if (typeof v === 'string') payload[k] = v; }
+      // Send as multipart so the optional photo (and the Turnstile token) ride along.
       const res = await fetch('/api/lead', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
+        headers: { Accept: 'application/json' },
+        body: fd,
       });
       const out = await res.json().catch(() => ({ success: res.ok }));
       if (!res.ok || !out.success) throw new Error(out.message || 'bad status');

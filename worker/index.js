@@ -27,11 +27,19 @@ export default {
 };
 
 async function handleLead(request, env, ctx) {
-  let body;
+  let body = {};
+  let photo = null; // optional uploaded image (File), delivered as an email attachment
   const ct = request.headers.get('content-type') || '';
   try {
-    if (ct.includes('application/json')) body = await request.json();
-    else { const fd = await request.formData(); body = Object.fromEntries(fd.entries()); }
+    if (ct.includes('application/json')) {
+      body = await request.json();
+    } else {
+      const fd = await request.formData();
+      for (const [k, v] of fd.entries()) {
+        if (v instanceof File) { if (k === 'photo' && v.size > 0) photo = v; }
+        else body[k] = v;
+      }
+    }
   } catch { return json({ success: false, message: 'Invalid request' }, 400); }
   if (!body || typeof body !== 'object') return json({ success: false, message: 'Invalid request' }, 400);
 
@@ -73,18 +81,21 @@ async function handleLead(request, env, ctx) {
 
   if (env.DB) {
     try {
+      const dataJson = JSON.stringify(
+        photo ? { ...body, photo: { name: photo.name, size: photo.size, type: photo.type } } : body
+      );
       await env.DB.prepare(
         `INSERT INTO leads (created_at, site, name, phone, email, message, source, ip, ua, data)
          VALUES (?,?,?,?,?,?,?,?,?,?)`
       ).bind(now, SITE_SLUG, norm(body.name), phone, email, norm(body.message),
-             source, ip, ua, JSON.stringify(body)).run();
+             source, ip, ua, dataJson).run();
     } catch (e) {
       // Don't lose the lead on a storage hiccup — the email alert is the safety net.
       console.error('leads D1 insert failed:', e);
     }
   }
 
-  ctx.waitUntil(sendEmail(env, body, { email, source }).catch((e) => console.error('lead email failed:', e)));
+  ctx.waitUntil(sendEmail(env, body, { email, source, photo }).catch((e) => console.error('lead email failed:', e)));
   return json({ success: true });
 }
 
@@ -104,16 +115,33 @@ async function sendEmail(env, body, meta) {
   const FIELDS = ['name', 'phone', 'email', 'address', 'message', 'source'];
   const lines = [`NEW LEAD — Dripping Springs Well Drilling (${meta.source})`, ''];
   for (const f of FIELDS) { const v = norm(body[f]); if (v) lines.push(`${f}: ${v}`); }
+
+  const payload = {
+    from: env.ALERT_FROM || 'Dripping Springs Well Drilling <onboarding@resend.dev>',
+    to: [env.ALERT_TO],
+    reply_to: meta.email || undefined,
+    subject: `New lead — ${SITE_SLUG} — ${norm(body.name) || 'unknown'}`,
+  };
+
+  // Optional photo → email attachment (best-effort; skip non-images or >10MB).
+  const photo = meta.photo;
+  if (photo && photo.size > 0 && photo.size <= 10 * 1024 * 1024 && (photo.type || '').startsWith('image/')) {
+    try {
+      const buf = new Uint8Array(await photo.arrayBuffer());
+      let bin = '';
+      for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
+      payload.attachments = [{ filename: photo.name || 'photo.jpg', content: btoa(bin) }];
+      lines.push('', '📎 Customer photo attached.');
+    } catch (e) {
+      console.error('photo attach failed:', e);
+    }
+  }
+  payload.text = lines.join('\n');
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: 'Bearer ' + env.RESEND_API_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      from: env.ALERT_FROM || 'Dripping Springs Well Drilling <onboarding@resend.dev>',
-      to: [env.ALERT_TO],
-      reply_to: meta.email || undefined,
-      subject: `New lead — ${SITE_SLUG} — ${norm(body.name) || 'unknown'}`,
-      text: lines.join('\n'),
-    }),
+    body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error('Resend ' + res.status);
 }
