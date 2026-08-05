@@ -1,16 +1,16 @@
 /**
- * hays-well-drilling — Worker entry (Workers Static Assets + a lead endpoint).
+ * Lead-gen site Worker entry (Workers Static Assets + a lead endpoint). PORTABLE — identical
+ * across every site; per-site values come from wrangler.jsonc `vars` (SITE_SLUG, COMPANY,
+ * ALERT_TO, ALERT_FROM) + secrets (RESEND_API_KEY, TURNSTILE_SECRET).
  *
- * Asset-first: static pages are served directly by the ASSETS layer and never invoke
- * this Worker. Only POST /api/lead (and true 404s) reach the code below — so a bug here
- * can't take the marketing pages down.
+ * Asset-first: static pages are served directly by the ASSETS layer and never invoke this
+ * Worker; only POST /api/lead (and true 404s) reach the code below — a bug here can't take
+ * the marketing pages down.
  *
- * POST /api/lead → honeypot → (Turnstile if configured) → per-IP throttle → store in the
- * central `leads` D1 (arabuilds-intake, attributed by `site`) → best-effort Resend email.
- * Pattern cloned from client-sites/auguste/functions/api/lead.js + arabuilds intake.
+ * POST /api/lead → honeypot → Turnstile (if configured) → per-IP throttle → store in the
+ * central `leads` D1 (arabuilds-intake, attributed by `site`) → best-effort Resend email
+ * (optional customer photo delivered as an attachment).
  */
-const SITE_SLUG = 'hays-well-drilling';
-
 const json = (obj, status = 200) =>
   new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json' } });
 const norm = (v) => (v == null ? '' : String(v)).trim();
@@ -27,6 +27,8 @@ export default {
 };
 
 async function handleLead(request, env, ctx) {
+  const siteSlug = env.SITE_SLUG || 'unknown-site';
+
   let body = {};
   let photo = null; // optional uploaded image (File), delivered as an email attachment
   const ct = request.headers.get('content-type') || '';
@@ -46,12 +48,12 @@ async function handleLead(request, env, ctx) {
   // Honeypot — real people leave company_website empty. Silently accept, store nothing.
   if (norm(body.company_website) || norm(body.botcheck)) return json({ success: true });
 
-  // Oversized body (flood / storage abuse) — a real lead is a few KB.
+  // Oversized text body (flood / storage abuse) — a real lead is a few KB.
   if (JSON.stringify(body).length > 20000) return json({ success: false, message: 'Submission too large.' }, 413);
 
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
 
-  // Turnstile — enforced only when a secret is configured (test or real).
+  // Turnstile — enforced only when a secret is configured.
   if (env.TURNSTILE_SECRET) {
     const ok = await verifyTurnstile(env.TURNSTILE_SECRET, norm(body['cf-turnstile-response']), ip);
     if (!ok) return json({ success: false, message: 'Verification failed — please retry.' }, 403);
@@ -63,7 +65,7 @@ async function handleLead(request, env, ctx) {
       const since = new Date(Date.now() - 10 * 60 * 1000).toISOString();
       const row = await env.DB.prepare(
         `SELECT COUNT(*) AS n FROM leads WHERE ip = ? AND site = ? AND created_at >= ?`
-      ).bind(ip, SITE_SLUG, since).first();
+      ).bind(ip, siteSlug, since).first();
       if (row && row.n >= 5)
         return json({ success: false, message: 'Too many submissions — please try again shortly.' }, 429);
     } catch { /* throttle is best-effort; never block a real lead on it */ }
@@ -87,7 +89,7 @@ async function handleLead(request, env, ctx) {
       await env.DB.prepare(
         `INSERT INTO leads (created_at, site, name, phone, email, message, source, ip, ua, data)
          VALUES (?,?,?,?,?,?,?,?,?,?)`
-      ).bind(now, SITE_SLUG, norm(body.name), phone, email, norm(body.message),
+      ).bind(now, siteSlug, norm(body.name), phone, email, norm(body.message),
              source, ip, ua, dataJson).run();
     } catch (e) {
       // Don't lose the lead on a storage hiccup — the email alert is the safety net.
@@ -112,15 +114,17 @@ async function verifyTurnstile(secret, token, ip) {
 
 async function sendEmail(env, body, meta) {
   if (!env.RESEND_API_KEY || !env.ALERT_TO) return;
+  const company = env.COMPANY || 'Lead-gen site';
+  const siteSlug = env.SITE_SLUG || 'site';
   const FIELDS = ['name', 'phone', 'email', 'address', 'message', 'source'];
-  const lines = [`NEW LEAD — Dripping Springs Well Drilling (${meta.source})`, ''];
+  const lines = [`NEW LEAD — ${company} (${meta.source})`, ''];
   for (const f of FIELDS) { const v = norm(body[f]); if (v) lines.push(`${f}: ${v}`); }
 
   const payload = {
-    from: env.ALERT_FROM || 'Dripping Springs Well Drilling <onboarding@resend.dev>',
+    from: env.ALERT_FROM || `${company} <onboarding@resend.dev>`,
     to: [env.ALERT_TO],
     reply_to: meta.email || undefined,
-    subject: `New lead — ${SITE_SLUG} — ${norm(body.name) || 'unknown'}`,
+    subject: `New lead — ${siteSlug} — ${norm(body.name) || 'unknown'}`,
   };
 
   // Optional photo → email attachment (best-effort; skip non-images or >10MB).

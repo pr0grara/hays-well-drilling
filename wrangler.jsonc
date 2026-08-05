@@ -14,6 +14,8 @@
     { "binding": "DB", "database_name": "arabuilds-intake", "database_id": "aa1e362d-1057-4832-82a7-c19517e3214e" }
   ],
   "vars": {
+    "SITE_SLUG": "hays-well-drilling",
+    "COMPANY": "Dripping Springs Well Drilling",
     "ALERT_TO": "azbaghda@gmail.com",
     "ALERT_FROM": "Dripping Springs Well Drilling <onboarding@resend.dev>"
   }
