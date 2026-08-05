@@ -29,7 +29,7 @@ export function localBusiness(siteUrl: string = SITE.url): Record<string, unknow
   };
   // Only emit AggregateRating when real, verifiable reviews are configured.
   // Fake ratings are a scammy signal and trip schema validation.
-  if (SITE.ratingValue && SITE.reviewCount) {
+  if (SITE.ratingsAreReal && SITE.ratingValue && SITE.reviewCount) {
     schema.aggregateRating = {
       '@type': 'AggregateRating',
       ratingValue: SITE.ratingValue,

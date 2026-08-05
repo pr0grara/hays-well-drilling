@@ -29,6 +29,7 @@ export interface SiteConfig {
   /** AggregateRating — leave "" until there are real, verifiable reviews (fake ratings are a scammy signal and break schema). */
   ratingValue: string;
   reviewCount: string;
+  ratingsAreReal: boolean;
 }
 
 export const SITE: SiteConfig = {
@@ -50,6 +51,7 @@ export const SITE: SiteConfig = {
   // No reviews wired up yet. Leave blank until real, verifiable reviews exist.
   ratingValue: '',
   reviewCount: '',
+  ratingsAreReal: false,
 };
 
 export const tel = (phone: string = SITE.phone): string => `tel:${phone}`;
