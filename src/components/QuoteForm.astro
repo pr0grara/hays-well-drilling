@@ -20,9 +20,8 @@ const {
   sub = 'Tell us where your well is and what’s going on — we’ll call you back with a quote.',
 } = Astro.props;
 
-// Turnstile sitekey — Cloudflare TEST key (always passes). Swap for the real widget
-// sitekey once minted in the dashboard; also set the TURNSTILE_SECRET worker secret.
-const TURNSTILE_SITEKEY = '1x00000000000000000000AA';
+// Turnstile sitekey — real Managed widget for drippingspringswelldrilling.com.
+const TURNSTILE_SITEKEY = '0x4AAAAAAEGqFLtcdWMkDQAB';
 ---
 
 <div class="card quote-form" id="quote">
