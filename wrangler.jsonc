@@ -1,9 +1,21 @@
 {
-  // Cloudflare static deploy (Workers Static Assets). No worker script — pure static.
+  // Workers Static Assets + a lead endpoint. Asset-first: static pages are served by the
+  // ASSETS layer without invoking the worker; only /api/lead runs worker code.
   "name": "hays-well-drilling",
   "compatibility_date": "2025-01-01",
+  "main": "worker/index.js",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page"
+  },
+  // Central portfolio leads DB (arabuilds-intake) — attributed per site by the `site` column.
+  "d1_databases": [
+    { "binding": "DB", "database_name": "arabuilds-intake", "database_id": "aa1e362d-1057-4832-82a7-c19517e3214e" }
+  ],
+  "vars": {
+    "ALERT_TO": "azbaghda@gmail.com",
+    "ALERT_FROM": "Dripping Springs Well Drilling <onboarding@resend.dev>"
   }
+  // Secrets (set via `wrangler secret put`): RESEND_API_KEY, TURNSTILE_SECRET
 }
